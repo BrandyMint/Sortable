@@ -539,7 +539,10 @@
 					_on(document, 'touchend', this._onDrop);
 					_on(document, 'touchcancel', this._onDrop);
 				} else {
-					// Old brwoser
+					if (useFallback) {
+						_on(document, 'dragstart', _globalDragStart);
+					}
+					// Old browser
 					_on(document, 'mousemove', this._onTouchMove);
 					_on(document, 'mouseup', this._onDrop);
 				}
@@ -738,6 +741,7 @@
 
 			// Unbind events
 			_off(document, 'mousemove', this._onTouchMove);
+			_off(document, 'dragstart', _globalDragStart);
 
 			if (this.nativeDraggable) {
 				_off(document, 'drop', this);
@@ -1000,6 +1004,9 @@
 		return null;
 	}
 
+	function _globalDragStart(/**Event*/evt) {
+		evt.preventDefault();
+	}
 
 	function _globalDragOver(/**Event*/evt) {
 		if (evt.dataTransfer) {
@@ -1244,6 +1251,6 @@
 
 
 	// Export
-	Sortable.version = '1.4.2';
+	Sortable.version = '1.4.3';
 	return Sortable;
 });
